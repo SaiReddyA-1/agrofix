@@ -35,7 +35,7 @@ export async function POST(req: NextRequest) {
     });
     // In production, send OTP via email. For demo, return in response.
     return NextResponse.json({ success: true, otp });
-  } catch (err: any) {
+  } catch (err: unknown) {
     console.error('Registration error:', err);
     return NextResponse.json({ success: false, message: err.message || 'Server error' }, { status: 500 });
   }

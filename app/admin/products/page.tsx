@@ -9,7 +9,7 @@ import { ProductForm } from '@/app/components/forms/product-form';
 import type { CreateProductInput } from '@/app/lib/types';
 
 export default function AdminProducts() {
-  const router = useRouter();
+  
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);

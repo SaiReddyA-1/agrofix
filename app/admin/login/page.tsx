@@ -27,7 +27,7 @@ export default function AdminLoginPage() {
       } else {
         setError(data.message || 'Invalid admin credentials');
       }
-    } catch (err) {
+    } catch {
       setError('Server error');
     } finally {
       setLoading(false);

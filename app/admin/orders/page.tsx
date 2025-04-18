@@ -1,12 +1,11 @@
 "use client";
 import { useState, useEffect } from "react";
-import { Button } from '@/app/components/ui/button';
 import { formatPrice } from '@/app/lib/utils';
 
 const ORDER_STATUSES = ["PENDING", "IN_PROGRESS", "DELIVERED", "CANCELLED"];
 
 export default function AdminOrders() {
-  const [orders, setOrders] = useState<any[]>([]);
+  const [orders, setOrders] = useState<unknown[]>([]);
   const [loading, setLoading] = useState(true);
   const [updating, setUpdating] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -80,7 +79,7 @@ export default function AdminOrders() {
                 </td>
                 <td className="px-6 py-4">
                   <div className="text-xs text-gray-600">
-                    {order.items.map((item: any) => (
+                    {order.items.map((item: unknown) => (
                       <div key={item.id}>
                         {item.quantity}x {item.product.name}
                       </div>
