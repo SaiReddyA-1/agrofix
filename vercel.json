@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "buildCommand": "npm run build",
+  "installCommand": "npm install",
+  "framework": "nextjs",
+  "regions": ["sin1"],
+  "env": {
+    "POSTGRES_PRISMA_URL": "postgres://postgres:xjYRsJzi8Oh0KCKu@db.nmcueszfournqiujzjsh.pooler.supabase.co:6543/postgres?pgbouncer=true&connection_limit=1",
+    "POSTGRES_URL_NON_POOLING": "postgres://postgres:xjYRsJzi8Oh0KCKu@db.nmcueszfournqiujzjsh.supabase.co:5432/postgres"
+  }
+}
