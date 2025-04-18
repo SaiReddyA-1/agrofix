@@ -1,9 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+
 import type { Product } from '.prisma/client';
-import { Button } from '@/app/components/ui/button';
 import { formatPrice } from '@/app/lib/utils';
 import { ProductForm } from '@/app/components/forms/product-form';
 import type { CreateProductInput } from '@/app/lib/types';

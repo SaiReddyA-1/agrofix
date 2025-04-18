@@ -1,7 +1,25 @@
 "use client";
-import React, { useState } from 'react';
+import * as React from 'react';
+import { useState } from 'react';
 import { Button } from '../components/ui/button';
 import { CheckCircleIcon, XCircleIcon, ClockIcon, TruckIcon } from '@heroicons/react/24/solid';
+
+interface OrderItem {
+  id: string;
+  product: { name: string };
+  quantity: number;
+  price: number;
+}
+
+interface Order {
+  id: string;
+  status: keyof typeof statusMap;
+  buyerName: string;
+  buyerContact: string;
+  deliveryAddress: string;
+  totalAmount: number;
+  items: OrderItem[];
+}
 
 const statusMap: Record<string, { color: string; label: string; icon: JSX.Element }> = {
   PENDING: {
@@ -28,7 +46,7 @@ const statusMap: Record<string, { color: string; label: string; icon: JSX.Elemen
 
 export default function TrackOrderPage() {
   const [orderId, setOrderId] = useState('');
-  const [order, setOrder] = useState<any>(null);
+  const [order, setOrder] = useState<Order | null>(null);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -41,9 +59,13 @@ export default function TrackOrderPage() {
       const res = await fetch(`/api/orders/${orderId}`);
       if (!res.ok) throw new Error('Order not found');
       const data = await res.json();
-      setOrder(data);
-    } catch (err: any) {
-      setError(err.message || 'Order not found');
+      setOrder(data as Order);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message || 'Order not found');
+      } else {
+        setError('Order not found');
+      }
     } finally {
       setLoading(false);
     }
@@ -60,7 +82,7 @@ export default function TrackOrderPage() {
             type="text"
             placeholder="Enter Order ID"
             value={orderId}
-            onChange={e => setOrderId(e.target.value)}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setOrderId(e.target.value)}
             className="flex-1 border border-green-300 rounded px-3 py-2 focus:ring-2 focus:ring-green-300"
             required
           />
@@ -97,7 +119,7 @@ export default function TrackOrderPage() {
             </div>
             <h3 className="font-semibold mt-4 mb-2">Items</h3>
             <ul className="divide-y divide-gray-100">
-              {order.items.map((item: any) => (
+              {order.items.map((item: OrderItem) => (
                 <li key={item.id} className="py-2 flex justify-between">
                   <span>{item.product.name} x {item.quantity}</span>
                   <span className="text-gray-500">₹{item.price}</span>

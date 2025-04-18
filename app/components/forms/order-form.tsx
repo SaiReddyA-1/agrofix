@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import type { Product } from '.prisma/client';
 import { Button } from '../ui/button';
+import Image from 'next/image';
 import { formatPrice } from '@/app/lib/utils';
 import { CreateOrderInput } from '@/app/lib/types';
 
@@ -75,7 +76,7 @@ export function OrderForm({ products, onSubmit }: OrderFormProps) {
           >
             <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mb-4 overflow-hidden">
               {product.image ? (
-                <img src={product.image} alt={product.name} className="object-cover w-full h-full" />
+                <Image src={product.image} alt={product.name} fill className="object-cover w-full h-full" />
               ) : (
                 <span className="text-gray-300 text-4xl">🥕</span>
               )}
@@ -103,7 +104,7 @@ export function OrderForm({ products, onSubmit }: OrderFormProps) {
                 <div className="flex items-center gap-4">
                   <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center overflow-hidden">
                     {item.product.image ? (
-                      <img src={item.product.image} alt={item.product.name} className="object-cover w-full h-full" />
+                      <Image src={item.product.image} alt={item.product.name} fill className="object-cover w-full h-full" />
                     ) : (
                       <span className="text-gray-300 text-2xl">🥕</span>
                     )}

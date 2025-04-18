@@ -1,6 +1,5 @@
 "use client";
 import { useEffect, useState } from "react";
-import { Button } from "../../components/ui/button";
 
 interface Order {
   id: string;
@@ -8,12 +7,15 @@ interface Order {
   createdAt: string;
   totalAmount: number;
   items: { product: { name: string }; quantity: number; price: number }[];
+  buyerName: string;
+  buyerContact: string;
+  deliveryAddress: string;
 }
 
 export default function OrderHistoryPage() {
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  const [error, setError] = useState<unknown>("");
 
   useEffect(() => {
     async function fetchOrders() {
@@ -22,8 +24,12 @@ export default function OrderHistoryPage() {
         if (!res.ok) throw new Error("Failed to fetch order history");
         const data = await res.json();
         setOrders(data);
-      } catch (err: any) {
-        setError(err.message || "Failed to fetch order history");
+      } catch (err: unknown) {
+        if (err instanceof Error) {
+          setError(err.message || "Failed to fetch order history");
+        } else {
+          setError("Failed to fetch order history");
+        }
       } finally {
         setLoading(false);
       }
@@ -35,7 +41,7 @@ export default function OrderHistoryPage() {
     <div className="max-w-3xl mx-auto py-12">
       <h1 className="text-4xl font-extrabold text-green-700 mb-10 text-center tracking-tight drop-shadow">Order History</h1>
       {loading && <div className="text-gray-500">Loading...</div>}
-      {error && <div className="text-red-600">{error}</div>}
+      {error && <div className="text-red-600">{error as string}</div>}
       {!loading && !error && orders.length === 0 && (
         <div className="text-gray-500">No orders found.</div>
       )}

@@ -8,9 +8,8 @@ import { CreateOrderInput } from '../lib/types';
 
 export default function OrderPage() {
   const [products, setProducts] = useState<Product[]>([]);
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState(false);
+
   const router = useRouter();
 
   const handleSubmit = async (data: CreateOrderInput) => {

@@ -9,18 +9,22 @@ export default function PlaceOrderPage() {
   const [orderId, setOrderId] = useState<string | null>(null);
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  const [error, setError] = useState<string>("");
 
   useEffect(() => {
-    async function fetchProducts() {
+    async function fetchProducts(): Promise<void> {
       try {
         setLoading(true);
         const res = await fetch("/api/products");
         if (!res.ok) throw new Error("Failed to fetch products");
-        const data = await res.json();
+        const data: Product[] = await res.json();
         setProducts(data);
-      } catch (err: any) {
-        setError(err.message || "Failed to fetch products");
+      } catch (err: unknown) {
+        if (err instanceof Error) {
+          setError(err.message || "Failed to fetch products");
+        } else {
+          setError("Failed to fetch products");
+        }
       } finally {
         setLoading(false);
       }

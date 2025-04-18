@@ -1,9 +1,12 @@
 import { HTMLAttributes, forwardRef } from 'react';
 import { cn } from '@/app/lib/utils';
 
-interface CardProps extends React.HTMLAttributes<HTMLDivElement> {}
+import { type ClassValue } from 'clsx';
 
-const Card = forwardRef<HTMLDivElement, CardProps>(
+const Card = forwardRef<HTMLDivElement, {
+  className?: ClassValue;
+  children?: React.ReactNode;
+} & Omit<React.HTMLAttributes<HTMLDivElement>, 'className'> >(
   ({ className, ...props }, ref) => {
     return (
       <div

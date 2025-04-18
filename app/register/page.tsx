@@ -35,7 +35,7 @@ export default function RegisterPage() {
           setLoading(false);
         }
       }
-    } catch (err) {
+    } catch {
       setError('Server error');
     } finally {
       setLoading(false);
@@ -59,7 +59,7 @@ export default function RegisterPage() {
       } else {
         setError(data.message || 'OTP verification failed');
       }
-    } catch (err) {
+    } catch {
       setError('Server error');
     } finally {
       setLoading(false);

@@ -1,29 +1,48 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { formatPrice } from '@/app/lib/utils';
 
 const ORDER_STATUSES = ["PENDING", "IN_PROGRESS", "DELIVERED", "CANCELLED"];
 
 export default function AdminOrders() {
-  const [orders, setOrders] = useState<unknown[]>([]);
+  interface OrderItem {
+    id: string;
+    product: { name: string };
+    quantity: number;
+    price: number;
+  }
+  interface Order {
+    id: string;
+    buyerName: string;
+    buyerContact: string;
+    items: OrderItem[];
+    totalAmount: number;
+    status: string;
+  }
+  const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
   const [updating, setUpdating] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  async function fetchOrders() {
+  const fetchOrders = useCallback(async () => {
     setLoading(true);
     try {
       const res = await fetch("/api/orders");
       if (!res.ok) throw new Error("Failed to fetch orders");
-      setOrders(await res.json());
-    } catch (err: any) {
-      setError(err.message || "Failed to fetch orders");
+      const data = await res.json();
+      setOrders(data as Order[]);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message || "Failed to fetch orders");
+      } else {
+        setError("Failed to fetch orders");
+      }
     } finally {
       setLoading(false);
     }
-  }
+  }, []);
 
-  async function handleStatusChange(orderId: string, status: string) {
+  const handleStatusChange = async (orderId: string, status: string) => {
     setUpdating(orderId);
     setError(null);
     try {
@@ -34,8 +53,12 @@ export default function AdminOrders() {
       });
       if (!res.ok) throw new Error("Failed to update status");
       await fetchOrders();
-    } catch (err: any) {
-      setError(err.message || "Failed to update status");
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message || "Failed to update status");
+      } else {
+        setError("Failed to update status");
+      }
     } finally {
       setUpdating(null);
     }
@@ -43,7 +66,7 @@ export default function AdminOrders() {
 
   useEffect(() => {
     fetchOrders();
-  }, []);
+  }, [fetchOrders]); 
 
   if (loading) {
     return <div className="p-8 text-center">Loading...</div>;
@@ -79,7 +102,7 @@ export default function AdminOrders() {
                 </td>
                 <td className="px-6 py-4">
                   <div className="text-xs text-gray-600">
-                    {order.items.map((item: unknown) => (
+                    {order.items.map((item: OrderItem) => (
                       <div key={item.id}>
                         {item.quantity}x {item.product.name}
                       </div>
@@ -92,9 +115,9 @@ export default function AdminOrders() {
                     className="border border-green-300 rounded px-2 py-1 bg-green-50 focus:ring-2 focus:ring-green-300 text-green-700 font-semibold"
                     value={order.status}
                     disabled={updating === order.id}
-                    onChange={e => handleStatusChange(order.id, e.target.value)}
+                    onChange={(e) => handleStatusChange(order.id, e.target.value)}
                   >
-                    {ORDER_STATUSES.map(status => (
+                    {ORDER_STATUSES.map((status) => (
                       <option key={status} value={status}>{status.replace('_', ' ')}</option>
                     ))}
                   </select>

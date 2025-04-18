@@ -5,7 +5,7 @@ import { UpdateOrderStatusInput } from '@/app/lib/types';
 export async function GET(
   request: NextRequest,
   context: { params: { id: string } }
-) {
+): Promise<Response> {
   try {
     const order = await prisma.order.findUnique({
       where: { id: context.params.id },
@@ -35,7 +35,7 @@ export async function GET(
   }
 }
 
-export async function PUT(request: NextRequest, context: { params: { id: string } }) {
+export async function PUT(request: NextRequest, context: { params: { id: string } }): Promise<Response> {
   try {
     const body: UpdateOrderStatusInput = await request.json();
 
