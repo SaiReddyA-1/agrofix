@@ -37,9 +37,6 @@ npm install
 
 3. Set up your environment variables:
 Create a `.env` file in the root directory with the following content:
-```env
-DATABASE_URL="postgresql://user:password@localhost:5432/agrofix"
-```
 
 4. Initialize the database:
 ```bash
