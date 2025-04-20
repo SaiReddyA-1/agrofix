@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { Button } from '@/components/ui/button';
 
 import type { Product } from '.prisma/client';
 import { formatPrice } from '@/app/lib/utils';
